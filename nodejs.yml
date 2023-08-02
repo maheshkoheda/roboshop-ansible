@@ -1,24 +1,26 @@
-#echo -e "\e[36m >>>>>> Create MongoDB Repo <<<<<<<<\e[0m"
-#cp mongo.repo /etc/yum.repos.d/mongo.repo &>>${log}
-#func_exit_status
-#
-#echo -e "\e[36m >>>>>>> Install NodeJS Repos <<<<<<<<\e[0m"
-#curl -sL https://rpm.nodesource.com/setup_lts.x | bash &>>${log}
-#func_exit_status
-#
-#echo -e "\e[36m >>>>>>> Install NodeJS <<<<<<<<\e[0m"
-#yum install nodejs -y &>>${log}
-#func_exit_status
-#
-#func_apppreq
-#
-#echo -e "\e[36m >>>>>>> Download NodeJS Dependencies <<<<<<<<\e[0m"
-#npm install &>>${log}
-#func_exit_status
-#
-#func_schema_setup
-#
-#func_systemd
-#
-#}
-- name: Copy M
+- name: Copy MomgoDB Yum repo file
+  ansible.builtin.copy:
+    src: mongo-repo
+    dest: /etc/yum.repos.d/mongo.repo
+
+- name: Install NodeJS Repos
+  ansible.builtin.shell: curl -sL https://rpm.nodesource.com/setup_lts.x | bash
+
+- name: Install NodeJS
+  ansible.builtin.yum:
+    name: nodejs
+    state: installed
+
+- name: App pre-requisites
+  ansible.builtin.import_tasks: app-preq.yml
+
+- name: Download NodeJS Dependencies
+  ansible.builtin.shell: npm install
+  args:
+    chdir: /app
+
+- name: Schema setup
+  ansible.builtin.import_tasks: app-preq.yml
+
+
+
