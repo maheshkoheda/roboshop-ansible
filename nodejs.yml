@@ -1,6 +1,6 @@
-- name: Copy MomgoDB Yum repo file
+- name: Copy MongoDB Yum repo file
   ansible.builtin.copy:
-    src: mongo-repo
+    src: mongo.repo
     dest: /etc/yum.repos.d/mongo.repo
 
 - name: Install NodeJS Repos
