@@ -1,2 +1,4 @@
 - name: Python Setup
-  ansible.builtin.import_tasks: python.yml
+  ansible.builtin.import_roles:
+    name: common
+    tasks_from: python
